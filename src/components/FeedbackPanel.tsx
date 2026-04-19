@@ -1,5 +1,5 @@
 import React from 'react';
-import { FeedbackLayer } from '../types/scenario';
+import type { FeedbackLayer } from '../types/scenario';
 
 const KIND_STYLES: Record<FeedbackLayer['kind'], { border: string; label: string; labelColor: string }> = {
   diagnosis: {

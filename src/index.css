@@ -22,20 +22,105 @@
 
 @layer utilities {
   .fade-in {
-    animation: fadeIn 0.4s ease forwards;
+    animation: fadeIn 0.5s ease forwards;
   }
 
   .slide-up {
     animation: slideUp 0.35s ease forwards;
   }
+
+  .shake {
+    animation: shake 0.45s ease-in-out;
+  }
+
+  .bounce-correct {
+    animation: bounceCorrect 0.5s ease-out;
+  }
 }
 
+/* ── Entry animations ──────────────────────────── */
 @keyframes fadeIn {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
 
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(12px); }
+  from { opacity: 0; transform: translateY(14px); }
   to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Answer feedback ───────────────────────────── */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  15%       { transform: translateX(-6px); }
+  30%       { transform: translateX(6px); }
+  45%       { transform: translateX(-4px); }
+  60%       { transform: translateX(4px); }
+  75%       { transform: translateX(-2px); }
+  90%       { transform: translateX(2px); }
+}
+
+@keyframes bounceCorrect {
+  0%   { transform: scale(1) translateY(0); }
+  35%  { transform: scale(1.03) translateY(-4px); }
+  65%  { transform: scale(0.99) translateY(1px); }
+  100% { transform: scale(1) translateY(0); }
+}
+
+/* ── Ambient orbs ──────────────────────────────── */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  will-change: transform;
+}
+
+.orb-1 {
+  width: 55vw;
+  height: 55vw;
+  background: radial-gradient(circle, rgba(124, 111, 255, 0.18) 0%, transparent 70%);
+  top: -20%;
+  left: -15%;
+  animation: orbit1 27s ease-in-out infinite;
+}
+
+.orb-2 {
+  width: 45vw;
+  height: 45vw;
+  background: radial-gradient(circle, rgba(56, 130, 246, 0.14) 0%, transparent 70%);
+  bottom: -15%;
+  right: -10%;
+  animation: orbit2 34s ease-in-out infinite;
+}
+
+.orb-3 {
+  width: 35vw;
+  height: 35vw;
+  background: radial-gradient(circle, rgba(167, 100, 255, 0.10) 0%, transparent 70%);
+  top: 40%;
+  left: 35%;
+  animation: orbit3 19s ease-in-out infinite;
+}
+
+@keyframes orbit1 {
+  0%   { transform: translate(0, 0); }
+  25%  { transform: translate(22vw, 18vh); }
+  50%  { transform: translate(8vw, 38vh); }
+  75%  { transform: translate(-8vw, 20vh); }
+  100% { transform: translate(0, 0); }
+}
+
+@keyframes orbit2 {
+  0%   { transform: translate(0, 0); }
+  25%  { transform: translate(-20vw, -15vh); }
+  50%  { transform: translate(-35vw, -5vh); }
+  75%  { transform: translate(-15vw, -25vh); }
+  100% { transform: translate(0, 0); }
+}
+
+@keyframes orbit3 {
+  0%   { transform: translate(0, 0); }
+  33%  { transform: translate(15vw, -20vh); }
+  66%  { transform: translate(-18vw, 15vh); }
+  100% { transform: translate(0, 0); }
 }

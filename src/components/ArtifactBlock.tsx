@@ -1,5 +1,5 @@
 import React from 'react';
-import { Artifact } from '../types/scenario';
+import type { Artifact } from '../types/scenario';
 
 const STYLES: Record<Artifact['kind'], { border: string; dot: string; labelColor: string; textColor: string }> = {
   log: {
