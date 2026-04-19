@@ -1,4 +1,4 @@
-import { Scenario } from '../../types/scenario';
+import type { Scenario } from '../../types/scenario';
 
 export const nodeMemoryLeak01: Scenario = {
   id: 'node-memory-leak-01',

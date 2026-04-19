@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { RevealStep as RevealStepType } from '../types/scenario';
+import type { RevealStep as RevealStepType } from '../types/scenario';
 import ArtifactBlock from './ArtifactBlock';
 
 interface Props {

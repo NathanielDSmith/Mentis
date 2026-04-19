@@ -1,5 +1,5 @@
 import React from 'react';
-import { Choice } from '../types/scenario';
+import type { Choice } from '../types/scenario';
 
 interface Props {
   choices: Choice[];
