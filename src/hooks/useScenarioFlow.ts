@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { Scenario } from '../types/scenario';
+import type { Scenario } from '../types/scenario';
 
 export type FlowStage = 'reading' | 'answering' | 'feedback' | 'complete';
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { getScenarioById } from '../data/scenarios';
 import { useScenarioFlow } from '../hooks/useScenarioFlow';
@@ -14,12 +14,11 @@ const DIFFICULTY_BADGE: Record<string, string> = {
 
 export default function ScenarioRunner() {
   const { scenarioId } = useParams<{ scenarioId: string }>();
-  const navigate = useNavigate();
   const scenario = getScenarioById(scenarioId ?? '');
 
   if (!scenario) {
     return (
-      <div className="min-h-screen bg-mentis-bg flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <p className="font-mono text-mentis-muted text-sm mb-4">scenario not found</p>
           <Link to="/" className="font-mono text-mentis-accent hover:underline text-sm">
@@ -38,16 +37,24 @@ function Runner({ scenarioId }: { scenarioId: string }) {
   const { state, revealNext, submitAnswer, revealNextFeedback } = useScenarioFlow(scenario);
   const navigate = useNavigate();
 
+  // Tracks whether the current reveal step is still typing
+  const [isTyping, setIsTyping] = useState(true);
+
   const { stage, revealedSteps, selectedChoiceId, isCorrect, feedbackLayerIndex } = state;
   const isLastStep = revealedSteps === scenario.revealSteps.length - 1;
   const isAnswering = stage === 'answering';
   const isFeedback = stage === 'feedback' || stage === 'complete';
   const isComplete = stage === 'complete';
 
+  function handleRevealNext() {
+    setIsTyping(true);
+    revealNext();
+  }
+
   return (
-    <div className="min-h-screen bg-mentis-bg text-mentis-text">
+    <div className="min-h-screen text-mentis-text relative z-10">
       {/* Top nav */}
-      <header className="border-b border-mentis-border px-6 py-4 flex items-center justify-between sticky top-0 bg-mentis-bg/95 backdrop-blur-sm z-10">
+      <header className="border-b border-mentis-border px-6 py-4 flex items-center justify-between sticky top-0 bg-mentis-bg/80 backdrop-blur-md z-20">
         <Link to="/" className="font-mono text-mentis-muted hover:text-mentis-text text-xs transition-colors">
           ← lab
         </Link>
@@ -72,7 +79,6 @@ function Runner({ scenarioId }: { scenarioId: string }) {
           <p className="text-mentis-muted text-sm leading-relaxed">{scenario.context}</p>
         </div>
 
-        {/* Divider */}
         <div className="border-t border-mentis-border mb-8" />
 
         {/* Reveal steps */}
@@ -84,7 +90,8 @@ function Runner({ scenarioId }: { scenarioId: string }) {
                 key={i}
                 index={i}
                 step={step}
-                animate={i === revealedSteps && i > 0}
+                animate={i === revealedSteps && stage === 'reading'}
+                onDone={() => setIsTyping(false)}
               />
             );
           })}
@@ -112,9 +119,9 @@ function Runner({ scenarioId }: { scenarioId: string }) {
           />
         )}
 
-        {/* Complete — back to lobby */}
+        {/* Complete */}
         {isComplete && (
-          <div className="mt-10 slide-up flex gap-4">
+          <div className="mt-10 slide-up">
             <button
               onClick={() => navigate('/')}
               className="font-mono text-sm text-mentis-text border border-mentis-border
@@ -126,13 +133,15 @@ function Runner({ scenarioId }: { scenarioId: string }) {
           </div>
         )}
 
-        {/* Continue CTA (reading stage only) */}
+        {/* Continue CTA */}
         {stage === 'reading' && (
           <div className="mt-10">
             <button
-              onClick={revealNext}
+              onClick={handleRevealNext}
+              disabled={isTyping}
               className="font-mono text-sm bg-mentis-accent hover:bg-mentis-accent-dim text-white
-                         rounded-lg px-6 py-3 transition-all duration-150 font-medium"
+                         rounded-lg px-6 py-3 transition-all duration-200 font-medium
+                         disabled:opacity-40 disabled:cursor-not-allowed"
             >
               {isLastStep ? 'make your diagnosis →' : 'continue →'}
             </button>
