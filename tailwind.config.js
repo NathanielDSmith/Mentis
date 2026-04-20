@@ -5,16 +5,16 @@ export default {
     extend: {
       colors: {
         mentis: {
-          bg: '#08080f',
-          surface: '#0f0f1a',
-          'surface-hover': '#141428',
-          border: '#1e1e3a',
-          text: '#e2e2f0',
-          muted: '#5a5a8a',
-          accent: '#7c6fff',
-          'accent-dim': '#5b4fd9',
-          correct: '#22c55e',
-          wrong: '#ef4444',
+          bg:              '#070b14',  // midnight navy — warm dark, not void black
+          surface:         '#0d1426',  // raised surface
+          'surface-hover': '#111d35',  // hover state
+          border:          '#1e2d4a',  // navy border
+          text:            '#e8eaf0',  // off-white, slight warmth
+          muted:           '#637089',  // blue-grey, readable
+          accent:          '#10d9a0',  // mint-emerald — growth, progress
+          'accent-dim':    '#0bb885',  // hover/pressed accent
+          correct:         '#22c55e',  // green
+          wrong:           '#ef4444',  // red
         },
       },
     },
