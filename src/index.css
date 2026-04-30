@@ -13,8 +13,8 @@
   }
 
   body {
-    background-color: #08080f;
-    color: #e2e2f0;
+    background-color: #070b14;
+    color: #e8eaf0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -78,7 +78,7 @@
 .orb-1 {
   width: 55vw;
   height: 55vw;
-  background: radial-gradient(circle, rgba(124, 111, 255, 0.18) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(16, 217, 160, 0.22) 0%, transparent 70%);
   top: -20%;
   left: -15%;
   animation: orbit1 27s ease-in-out infinite;
@@ -87,7 +87,7 @@
 .orb-2 {
   width: 45vw;
   height: 45vw;
-  background: radial-gradient(circle, rgba(56, 130, 246, 0.14) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.18) 0%, transparent 70%);
   bottom: -15%;
   right: -10%;
   animation: orbit2 34s ease-in-out infinite;
@@ -96,7 +96,7 @@
 .orb-3 {
   width: 35vw;
   height: 35vw;
-  background: radial-gradient(circle, rgba(167, 100, 255, 0.10) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(244, 114, 182, 0.15) 0%, transparent 70%);
   top: 40%;
   left: 35%;
   animation: orbit3 19s ease-in-out infinite;
