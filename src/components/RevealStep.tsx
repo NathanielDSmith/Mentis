@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import type { RevealStep as RevealStepType } from '../types/scenario';
 import ArtifactBlock from './ArtifactBlock';
 import { useTypewriter } from '../hooks/useTypewriter';

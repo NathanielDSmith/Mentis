@@ -1,4 +1,3 @@
-import React from 'react';
 import type { Artifact } from '../types/scenario';
 
 const STYLES: Record<Artifact['kind'], { border: string; dot: string; labelColor: string; textColor: string }> = {
@@ -50,17 +49,17 @@ export default function ArtifactBlock({ artifact }: Props) {
   const s = STYLES[artifact.kind];
 
   return (
-    <div className={`rounded-lg border ${s.border} bg-black/40 overflow-hidden mt-4`}>
+    <div className={`rounded-xl border ${s.border} bg-black/50 overflow-hidden mt-4`}>
       {/* Header bar */}
-      <div className="flex items-center gap-2 px-4 py-2 border-b border-white/5 bg-white/[0.02]">
-        <span className={`w-2 h-2 rounded-full ${s.dot}`} />
-        <span className={`font-mono text-xs tracking-widest ${s.labelColor}`}>
+      <div className="artifact-header flex items-center gap-2.5 px-4 py-2.5 border-b border-white/[0.06]">
+        <span className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${s.dot}`} />
+        <span className={`font-mono text-xs tracking-[0.15em] uppercase ${s.labelColor}`}>
           {KIND_LABEL[artifact.kind]}
         </span>
         {artifact.label && (
           <>
-            <span className="text-white/10 font-mono text-xs">·</span>
-            <span className={`font-mono text-xs ${s.labelColor} opacity-70 truncate`}>
+            <span className="text-white/15 font-mono text-xs select-none">·</span>
+            <span className={`font-mono text-xs ${s.labelColor} opacity-60 truncate`}>
               {artifact.label}
             </span>
           </>
@@ -69,7 +68,7 @@ export default function ArtifactBlock({ artifact }: Props) {
 
       {/* Content */}
       <pre
-        className={`font-mono text-xs leading-relaxed p-4 overflow-x-auto whitespace-pre ${s.textColor}`}
+        className={`font-mono text-xs leading-loose p-5 overflow-x-auto whitespace-pre ${s.textColor}`}
       >
         {artifact.content}
       </pre>
