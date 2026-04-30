@@ -1,7 +1,8 @@
 {
   "name": "mentis",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
+  "description": "Scenario-based reasoning trainer",
   "type": "module",
   "scripts": {
     "dev": "vite",

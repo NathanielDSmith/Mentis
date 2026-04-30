@@ -15,12 +15,21 @@
   body {
     background-color: #070b14;
     color: #e8eaf0;
+    font-family: 'Inter', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 }
 
 @layer utilities {
+  .card-accent-hover:hover {
+    box-shadow: inset 2px 0 0 rgba(16, 217, 160, 0.55), 0 4px 24px rgba(0, 0, 0, 0.22);
+  }
+
+  .artifact-header {
+    background: linear-gradient(to bottom, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.02) 100%);
+  }
+
   .fade-in {
     animation: fadeIn 0.5s ease forwards;
   }

@@ -1,73 +1,32 @@
-# React + TypeScript + Vite
+# Mentis
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Scenario-based reasoning trainer. You get dropped into an incident — logs, code, metrics — and have to work out what's wrong before you see the answer.
 
-Currently, two official plugins are available:
+Built for drilling diagnostic thinking without memorising solutions. Swap the scenario set and it works for anything: infra incidents, code reviews, architecture decisions.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Running it
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Adding scenarios
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Scenarios live in `src/data/scenarios/`. Each one is a typed object — copy `node-memory-leak-01.ts` as a starting point.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+The schema (`src/types/scenario.ts`) is the source of truth. Key fields:
+
+- `revealSteps` — the evidence, revealed one at a time. Each step can have an attached artifact (log, code block, metrics, stack trace).
+- `choices` — multiple choice, exactly one `isCorrect: true`
+- `feedbackLayers` — revealed after the answer: `diagnosis`, `principle`, `deepdive`
+
+You can also generate scenarios with an AI — paste the schema into your model of choice and describe the situation. The format is simple enough that it works well.
+
+## Stack
+
+React 19 · TypeScript · Vite · Tailwind CSS · React Router
+
+## Status
+
+Early. One scenario so far. The scenario runner is solid; the home page will grow as more scenarios are added.

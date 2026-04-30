@@ -8,14 +8,14 @@ export const nodeMemoryLeak01: Scenario = {
   tags: ['node.js', 'memory', 'debugging'],
 
   context:
-    "It's 2:47am. Your Node.js API has been running clean for 6 months. " +
-    "Tonight the memory alert fired for the third time this week — and this time it didn't recover.",
+    "2:47am. The memory alert fired again — third time this week. " +
+    "This time the service didn't recover on its own. Node.js API, been running fine for six months until Tuesday's deploy.",
 
   revealSteps: [
     {
       content:
-        'You pull up the metrics dashboard. Heap usage has been climbing steadily since the last deploy on Tuesday. ' +
-        'No spikes — just a slow, relentless rise. The service restarts every time it crosses 512MB.',
+        'Metrics dashboard. Heap usage has been climbing since Tuesday\'s deploy — no spikes, just a slow grind upward. ' +
+        'The service is restarting every time it crosses 512MB.',
       artifact: {
         kind: 'metric',
         label: 'Heap Used (MB) — last 72 hours',
@@ -57,7 +57,7 @@ export async function trackOrder(req: Request, res: Response) {
     },
     {
       content:
-        'You check the logs around each memory spike. One line jumps out immediately.',
+        'You pull the logs around the restart windows.',
       artifact: {
         kind: 'log',
         label: 'app.log — Wed 21:18',
@@ -99,30 +99,29 @@ export async function trackOrder(req: Request, res: Response) {
   feedbackLayers: [
     {
       kind: 'diagnosis',
-      heading: 'The leak: listeners that outlive their requests',
+      heading: 'Listeners that outlive their requests',
       body:
-        'Every call to `trackOrder` adds a new `"update"` listener to `orderBus` — a module-level singleton. ' +
-        'The listener captures `req`, `res`, and `orderId` in its closure, keeping them alive. ' +
-        "Since the listener is never removed with `orderBus.off()`, it stays in memory forever. " +
-        'Node even told you: the `MaxListenersExceededWarning` at 11 listeners is the standard early-warning signal.',
+        'Every call to `trackOrder` registers a new `"update"` listener on `orderBus`, which is a module-level singleton. ' +
+        'Each listener closes over `req`, `res`, and `orderId` — so none of it gets garbage collected. ' +
+        'Node was already warning you: `MaxListenersExceededWarning` fires at 11 listeners by default. ' +
+        'By the time it paged you there were 23.',
     },
     {
       kind: 'principle',
-      heading: 'Rule: every .on() needs a matching .off()',
+      heading: 'Every .on() needs a matching .off()',
       body:
-        'EventEmitters are not scoped to a request lifecycle — they live as long as the object they\'re attached to. ' +
-        'Any time you register a listener inside a function that runs repeatedly (a request handler, a loop, a timer), ' +
-        'you must remove it when the work is done. ' +
-        'The fix here is to use `orderBus.once()` for one-shot listeners, or call `orderBus.off("update", handler)` ' +
-        'inside `res.on("finish", ...)` to clean up when the response closes.',
+        'EventEmitters live as long as the object they\'re attached to — they have no concept of a request lifecycle. ' +
+        'Register a listener inside something that runs on every request and you\'ve got a leak. ' +
+        '`orderBus.once()` would have fixed this one. For anything more complex, clean up inside `res.on("finish", ...)` ' +
+        'so the handler is removed when the response closes, regardless of how it exits.',
     },
     {
       kind: 'deepdive',
-      heading: 'How to catch this before it pages you',
+      heading: 'Catching it before it pages you',
       body:
-        'Three tools: (1) `emitter.listenerCount("update")` — log this on each request and watch it grow. ' +
-        '(2) `process.on("warning", ...)` — Node emits a warning object with `type: "MaxListenersExceededWarning"` you can forward to your logging pipeline. ' +
-        '(3) Clinic.js `clinic heapprofiler` — generates a flame graph of heap allocations that would have shown the listener closure accumulating within minutes of load testing.',
+        'Log `emitter.listenerCount("update")` on each request — a climbing number is the tell. ' +
+        'You can also pipe `process.on("warning", ...)` into your logging stack; Node emits a structured warning object with `type: "MaxListenersExceededWarning"` that most pipelines will surface. ' +
+        'If you want a heap-level view, `clinic heapprofiler` will show the listener closures accumulating in a flame graph after a few minutes of load.',
     },
   ],
 };
